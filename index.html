@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redirecting...</title>
+  <script>
+    window.onload = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const mid = urlParams.get("mid");
+      const status = urlParams.get("status");
+
+      if (!mid || !status) {
+        document.body.innerText = "Missing parameters: 'mid' or 'status'";
+        return;
+      }
+
+      // Your actual Apps Script endpoint
+      const scriptURL = "https://script.google.com/macros/s/AKfycbyApKZ6ZKPLf9v5AIlV13NBqYVX2CZdCncyMv3Wh-6w3U5FQCNykHDNf2fGdp3Z9YjW/exec";
+
+      // Call the script
+      fetch(`${scriptURL}?mid=${mid}&status=${status}`)
+        .then(() => {
+          // Redirect based on status
+          const base = "https://midfieldinsights.com";
+          if (status === "complete") {
+            window.location.href = `${base}/complete`;
+          } else if (status === "terminate") {
+            window.location.href = `${base}/terminate`;
+          } else if (status === "quotafull") {
+            window.location.href = `${base}/quotafull`;
+          } else {
+            document.body.innerText = "Invalid status value.";
+          }
+        })
+        .catch((err) => {
+          console.error("Logging failed", err);
+          document.body.innerText = "Error logging data. Check console.";
+        });
+    };
+  </script>
+</head>
+<body>
+  <p>Redirecting... please wait.</p>
+</body>
+</html>
